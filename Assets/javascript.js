@@ -1,20 +1,18 @@
 const tableMain = document.getElementById("table");
-
+// Fetching the correct json file and data
 fetch("data/listened.json")
   .then(res => {
     return res.json();
   })
+  // putting the data into tables for layout
   .then(data => {
     let table = "";
     table += "<table>";
     data.forEach(element => {
       table += "<tr>";
-      table += `<td><form class="rating" id="product1">
-        <button type="submit" class="heart" data-heart="1">
-             ❤
-            <span class="screen-reader">1 heart</span>
-        </button>
-    </form></td>`;
+      // putting the like hearts into the tables
+      table +=
+        '<td>  <i onclick="heartFunc(this)" class="fa fa-heart"></i></td>';
       table += `<td><img src="${element["Image"]}"></td>`;
       table += `<td>${element["Name"]}`;
       table += `<td>${element["Artist"]}`;
@@ -75,15 +73,12 @@ fetch("data/tracks.json")
       table += "<tr>";
       table += `<td>${element["Slot"]}`;
       table += `<td><img src="${element["Image"]}"></td>`;
-      table += `<td><form class="rating" id="product1">
-        <button type="submit" class="heart" data-heart="1">
-             ❤
-            <span class="screen-reader">1 heart</span>
-        </button>
-    </form></td>`;
+      table +=
+        '<td>  <i onclick="heartFunc(this)" class="fa fa-heart"></i></td>';
       table += `<td>${element["Name"]}`;
       table += `<br>${element["Artist"]}`;
-      table += `<td>${element["Listens"]}`;
+      table += `<td><div class="barchart">${element["Listens"]} Listens</div>`;
+      // document.getElementById("barchart").style.width = `${element["Listens"]}"/10000 * 100%"`;
     });
     table += "</table>";
     tableTracks.innerHTML = table;
@@ -113,33 +108,7 @@ function sendMessage() {
   );
 }
 
-// Listen for form submissions
-document.addEventListener(
-  "submit",
-  function(event) {
-    // Only run our code on .rating forms
-    if (!event.target.matches(".rating")) return;
-
-    // Prevent form from submitting
-    event.preventDefault();
-
-    var selected = document.activeElement;
-    if (!selected) return;
-    var selectedIndex = parseInt(selected.getAttribute("data-heart"), 10);
-
-    var hearts = Array.from(event.target.querySelectorAll(".heart"));
-
-    var selected2 = new Boolean(false);
-
-    hearts.forEach(function(heart, index) {
-      if (Boolean(selected2) == false) {
-        heart.classList.add("selected");
-        var selected2 = new Boolean(true);
-      } else {
-        heart.classList.remove("selected");
-        var selected2 = new Boolean(false);
-      }
-    });
-  },
-  false
-);
+//This is the fuction for the heart/unheart system.
+function heartFunc(x) {
+  x.classList.toggle("fa-heart-o");
+}
